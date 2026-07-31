@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -20,18 +20,15 @@ import ConfirmationDialog from "../../../components/common/ConfirmationDialog";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SettingsStackParamList } from "../../../types/navigation";
 
-
-
 export default function SettingsScreen() {
   const dispatch = useDispatch();
 
   type SettingsNavigationProp = NativeStackNavigationProp<
-  SettingsStackParamList,
-  "SettingsHome"
->;
+    SettingsStackParamList,
+    "SettingsHome"
+  >;
 
-const navigation =
-  useNavigation<SettingsNavigationProp>();
+  const navigation = useNavigation<SettingsNavigationProp>();
   const user = useSelector((state: RootState) => state.auth.user);
 
   const [logoutDialogVisible, setLogoutDialogVisible] = useState(false);
@@ -48,7 +45,11 @@ const navigation =
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
       <ProfileCard name={user?.name} email={user?.email} role={user?.role} />
 
       <SettingSection title="Account">
@@ -66,37 +67,35 @@ const navigation =
       </SettingSection>
 
       <SettingSection title="Support">
-  <SettingItem
-    title="About"
-    leftIcon="information-outline"
-    onPress={() => navigation.navigate("About")}
-  />
+        <SettingItem
+          title="About"
+          leftIcon="information-outline"
+          onPress={() => navigation.navigate("About")}
+        />
 
-  <SettingItem
-    title="Privacy Policy"
-    leftIcon="shield-check-outline"
-    onPress={() =>
-      navigation.navigate("Legal", {
-        title: "Privacy Policy",
-        content: PRIVACY_POLICY,
-      })
-    }
-  />
+        <SettingItem
+          title="Privacy Policy"
+          leftIcon="shield-check-outline"
+          onPress={() =>
+            navigation.navigate("Legal", {
+              title: "Privacy Policy",
+              content: PRIVACY_POLICY,
+            })
+          }
+        />
 
-  <SettingItem
-    title="Terms & Conditions"
-    leftIcon="file-document-outline"
-    showDivider={false}
-    onPress={() =>
-      navigation.navigate("Legal", {
-        title: "Terms & Conditions",
-        content: TERMS_AND_CONDITIONS,
-      })
-    }
-  />
-</SettingSection>
-
-      
+        <SettingItem
+          title="Terms & Conditions"
+          leftIcon="file-document-outline"
+          showDivider={false}
+          onPress={() =>
+            navigation.navigate("Legal", {
+              title: "Terms & Conditions",
+              content: TERMS_AND_CONDITIONS,
+            })
+          }
+        />
+      </SettingSection>
 
       <Button
         mode="contained"
@@ -119,7 +118,7 @@ const navigation =
           await handleLogout();
         }}
       />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -131,6 +130,12 @@ const styles = StyleSheet.create({
   },
 
   logoutButton: {
-    marginTop: 32,
-  },
+  marginTop: 32,
+  marginBottom: 24,
+},
+
+  content: {
+  padding: 16,
+  paddingBottom: 40,
+},
 });
